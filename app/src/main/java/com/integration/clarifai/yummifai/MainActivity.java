@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -27,6 +28,23 @@ import com.clarifai.api.RecognitionResult;
 import com.clarifai.api.Tag;
 
 
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
+import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
+
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.client.util.ExponentialBackOff;
+
+import com.google.api.services.calendar.CalendarScopes;
+import com.google.api.client.util.DateTime;
+
+import com.google.api.services.calendar.model.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -88,7 +106,7 @@ public class MainActivity extends AppCompatActivity{
 
     private void addCheckList(){
         listview.setTextFilterEnabled(true);
-        listview.setAdapter(new ArrayAdapter<>(this,android.R.layout.simple_list_item_checked,ingredients));
+        listview.setAdapter(new ArrayAdapter<>(this,R.layout.recipe_list_item_checked,ingredients));
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
