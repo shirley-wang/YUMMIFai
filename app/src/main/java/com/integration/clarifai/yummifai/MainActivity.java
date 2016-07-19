@@ -126,7 +126,6 @@ public class MainActivity extends AppCompatActivity{
         });
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if ((requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE || requestCode == GALLERY_IMAGE_ACTIVITY_REQUEST_CODE )&& resultCode == RESULT_OK) {
@@ -174,10 +173,8 @@ public class MainActivity extends AppCompatActivity{
         } else {
             // Image capture failed, advise user
         }
-
-
-
     }
+
     public static String getSearchTerm(){
         for(String str: ingredientsToFind){
             if(searchTerm.equals("")){
@@ -190,7 +187,7 @@ public class MainActivity extends AppCompatActivity{
     }
 
 
-    public static void setSearchTerm(String term){
+    public static void setSearchTerm(String term) {
         searchTerm = term;
     }
     private void clearScreen()

@@ -14,21 +14,13 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
-
-
-
 public class RecipePage extends AppCompatActivity{
-    float x1 ,x2;
-    float y1, y2;
     private static final String TAG = RecipePage.class.getSimpleName();
     private WebView myWebView;
 
@@ -38,7 +30,6 @@ public class RecipePage extends AppCompatActivity{
         setContentView(R.layout.activity_recipe_page);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
-
         getWebView();
     }
 
@@ -78,40 +69,6 @@ public class RecipePage extends AppCompatActivity{
 
     public void getWebView(){
         myWebView = (WebView) findViewById(R.id.webview);
-
-        myWebView.setOnTouchListener(new View.OnTouchListener(){
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                switch (motionEvent.getAction())
-                {
-                    // when user first touches the screen we get x and y coordinate
-                    case MotionEvent.ACTION_DOWN:
-                    {
-                        x1 = motionEvent.getX();
-                        y1 = motionEvent.getY();
-                        break;
-                    }
-                    case MotionEvent.ACTION_UP:
-                    {
-                        x2 = motionEvent.getX();
-                        y2 = motionEvent.getY();
-
-                        Log.i(TAG, x2+"");
-                        if (x1 < x2)
-                        {
-                            onSwipeRight();
-                        }
-                        if (x1 > x2)
-                        {
-                            onSwipeLeft();
-                        }
-                        break;
-                    }
-                }
-                return false;
-            }
-        });
-
         WebSettings webSettings = myWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
 
@@ -123,31 +80,6 @@ public class RecipePage extends AppCompatActivity{
         super.onPause();
         MainActivity.setSearchTerm("");
         Log.i(TAG, "on pause");
-    }
-
-    @Override
-    protected void onResume(){
-        super.onResume();
-        Log.i(TAG, "on resume");
-    }
-
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)
-    {
-        if ((keyCode == KeyEvent.KEYCODE_BACK) && myWebView.canGoBack()) {
-            myWebView.goBack();
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
-    public void onSwipeRight(){
-        Log.i(TAG,"swipe right");
-    }
-
-    public void onSwipeLeft(){
-        Log.i(TAG,"swipe LEFT");
     }
 
 }
