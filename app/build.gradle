@@ -24,13 +24,12 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:24.0.0'
     compile 'com.clarifai:clarifai-api-java:1.2.0'
-    compile 'com.google.android.gms:play-services-auth:9.2.0'
+    compile 'com.google.android.gms:play-services-auth:9.0.2'
     compile 'pub.devrel:easypermissions:0.1.5'
     compile('com.google.api-client:google-api-client-android:1.22.0') {
         exclude group: 'org.apache.httpcomponents'
     }
-    compile('com.google.apis:google-api-services-calendar:v3-rev199-1.22.0') {
+    compile('com.google.apis:google-api-services-calendar:v3-rev200-1.22.0') {
         exclude group: 'org.apache.httpcomponents'
     }
-
 }

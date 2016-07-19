@@ -11,4 +11,5 @@
     <string name="location">Add location</string>
     <string name="add_event">Add this recipe to calendar</string>
     <string name="invite_people">Invite people</string>
+    <string name="all_day">All-day</string>
 </resources>

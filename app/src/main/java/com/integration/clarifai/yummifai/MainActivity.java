@@ -7,14 +7,12 @@ import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 
-import android.widget.CheckBox;
 import android.widget.CheckedTextView;
 import android.widget.ImageButton;
 
@@ -29,23 +27,6 @@ import com.clarifai.api.Tag;
 
 
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
-import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
-
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.client.util.ExponentialBackOff;
-
-import com.google.api.services.calendar.CalendarScopes;
-import com.google.api.client.util.DateTime;
-
-import com.google.api.services.calendar.model.*;
-
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -55,8 +36,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity{
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
     private static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE = 200;
-    // private static final String TAG = RecognitionActivity.class.getSimpleName();
-    private static final String TAG = "ShirleyFlag";
+    private static final String TAG = MainActivity.class.getSimpleName();
     private final ClarifaiClient clarifaiClient = new ClarifaiClient(Credential.CLIENT_ID,
             Credential.CLIENT_SECRET);
     private static String searchTerm = "";
