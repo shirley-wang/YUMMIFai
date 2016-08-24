@@ -2,7 +2,7 @@
 
 Use the Clarifai API to build YUMMIFai, an app that recommends recipes based on pictures!
 
-<img src="https://raw.githubusercontent.com/shirley-wang/YUMMIFai/master/img/Yummifai.jpeg" width="500">
+<img src="https://github.com/shirley-wang/YUMMIFai/raw/master/img/Yummifai.jpg" width="500">
 
 ##Installation
 1. Go to [developer.clarifai.com](https://developer.clarifai.com/), sign up your Clarifai account.
