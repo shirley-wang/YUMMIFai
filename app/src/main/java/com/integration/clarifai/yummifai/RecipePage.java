@@ -13,7 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,7 +20,6 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 public class RecipePage extends AppCompatActivity{
-    private static final String TAG = RecipePage.class.getSimpleName();
     private WebView myWebView;
 
     @Override
@@ -48,9 +46,11 @@ public class RecipePage extends AppCompatActivity{
                 return true;
             default: return super.onOptionsItemSelected(item);
         }
-
     }
 
+    /**
+     * Create calendar event for
+     */
     @TargetApi(Build.VERSION_CODES.N)
     private void createEvent(){
         Calendar beginTime = Calendar.getInstance();
@@ -71,7 +71,6 @@ public class RecipePage extends AppCompatActivity{
         myWebView = (WebView) findViewById(R.id.webview);
         WebSettings webSettings = myWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
-
         myWebView.loadUrl("https://www.pinterest.com/search/pins/?q="+ MainActivity.getSearchTerm());
     }
 
@@ -79,7 +78,6 @@ public class RecipePage extends AppCompatActivity{
     protected void onPause() {
         super.onPause();
         MainActivity.setSearchTerm("");
-        Log.i(TAG, "on pause");
     }
 
 }

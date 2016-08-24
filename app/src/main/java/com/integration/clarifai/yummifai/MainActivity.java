@@ -40,31 +40,27 @@ public class MainActivity extends AppCompatActivity{
     private final ClarifaiClient clarifaiClient = new ClarifaiClient(Credential.CLIENT_ID,
             Credential.CLIENT_SECRET);
     private static String searchTerm = "";
+    private static ArrayList<String> itemsToFind = new ArrayList<>();
     private ListView listview;
     private ImageButton cameraButton;
     private ImageButton galleryButton;
-    private Button recipeButton;
-    private ArrayList<String> ingredients = new ArrayList<>();
-    private static ArrayList<String> ingredientsToFind = new ArrayList<>();
+    private ArrayList<String> items = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.i(TAG, "onCreate");
         getViews();
         handleCameraBtnClick();
         handleGalleryBtnClick();
-
     }
 
     public void getViews(){
         cameraButton = (ImageButton) findViewById(R.id.cameraButton);
         galleryButton = (ImageButton)findViewById(R.id.galleryButton);
-        recipeButton = (Button)findViewById(R.id.recipeBtn);
-        listview = (ListView) findViewById(R.id.ingredient_listView);
-        listview.setChoiceMode(listview.CHOICE_MODE_MULTIPLE);
+        listview = (ListView) findViewById(R.id.item_listView);
     }
+
     public void handleCameraBtnClick() {
         cameraButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -84,10 +80,9 @@ public class MainActivity extends AppCompatActivity{
         });
     }
 
-    private void addCheckList(){
+    private void addItemsList(){
         listview.setTextFilterEnabled(true);
-        listview.setAdapter(new ArrayAdapter<>(this,R.layout.recipe_list_item_checked,ingredients));
-
+        listview.setAdapter(new ArrayAdapter<>(this,R.layout.ingredient_list_item_checked, items));
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int index, long id) {
@@ -96,17 +91,14 @@ public class MainActivity extends AppCompatActivity{
                 String item = obj.toString();
                 if(v.isChecked())
                 {
-
-                    if(!ingredientsToFind.contains(item)){
-                        ingredientsToFind.add(item);
-                        Log.i(TAG,item+" is added");
+                    if(!itemsToFind.contains(item)){
+                        itemsToFind.add(item);
                     }
                 }
                 else
                 {
-                    if(ingredientsToFind.contains(item)){
-                        ingredientsToFind.remove(item);
-                        Log.i(TAG, item + " is deleted");
+                    if(itemsToFind.contains(item)){
+                        itemsToFind.remove(item);
                     }
                 }
             }
@@ -114,14 +106,14 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private void showRecipeBtn(){
-        TextView chooseView = (TextView)findViewById(R.id.chooseIngredientText);
-        chooseView.setVisibility(TextView.VISIBLE);
+        TextView chooseItemsText = (TextView)findViewById(R.id.chooseItemsText);
+        chooseItemsText.setVisibility(TextView.VISIBLE);
+        Button recipeButton = (Button)findViewById(R.id.recipeButton);
         recipeButton.setVisibility(Button.VISIBLE);
         recipeButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent(MainActivity.this, RecipePage.class);
                 startActivity(i);
-
             }
         });
     }
@@ -129,14 +121,17 @@ public class MainActivity extends AppCompatActivity{
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if ((requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE || requestCode == GALLERY_IMAGE_ACTIVITY_REQUEST_CODE )&& resultCode == RESULT_OK) {
-            // Image captured and saved to fileUri specified in the Intent
-            // Log.i(TAG, "its here");
+            // image captured, saved or selected to uri
             try {
                 InputStream inStream = getContentResolver().openInputStream(data.getData());
                 Bitmap bitmap = BitmapFactory.decodeStream(inStream);
                 ImageView preview = (ImageView)findViewById(R.id.imageView);
                 preview.setImageBitmap(bitmap);
-                // Run recognition on a background thread since it makes a network call.
+                // scale the input image to improve the performance
+                bitmap = Bitmap.createScaledBitmap(bitmap, 320,
+                        320 * bitmap.getHeight() / bitmap.getWidth(), true);
+
+                // Run recognition on a background thread.
                 new AsyncTask<Bitmap, Void, RecognitionResult>() {
                     @Override
                     protected RecognitionResult doInBackground(Bitmap... bitmaps) {
@@ -148,52 +143,43 @@ public class MainActivity extends AppCompatActivity{
 
                     @Override
                     protected void onPostExecute(RecognitionResult result) {
-                        // ScrollView sV = (ScrollView)findViewById(R.id.scrollView);
                         clearScreen();
-
                         for (Tag tag : result.getTags()) {
-
-
-                            Log.i(TAG, tag.getName() + tag.getProbability());
-                            ingredients.add(tag.getName());
-
+                            items.add(tag.getName());
                         }
-                        addCheckList();
+                        addItemsList();
                         showRecipeBtn();
-
                     }
                 }.execute(bitmap);
-
-
             } catch (FileNotFoundException e) {
                 Log.e(TAG, e.getMessage());
             }
         } else if (resultCode == RESULT_CANCELED) {
-            // User cancelled the image capture
+            // User cancelled the image capture or selection.
         } else {
-            // Image capture failed, advise user
+            // capture failed or did not find file.
         }
     }
 
     public static String getSearchTerm(){
-        for(String str: ingredientsToFind){
+        for(String str: itemsToFind){
             if(searchTerm.equals("")){
                 searchTerm+=str;
             }
             else
-                searchTerm+="%20"+str;
+                searchTerm+=" "+str;
         }
         return searchTerm;
     }
 
 
-    public static void setSearchTerm(String term) {
+    public static void setSearchTerm (String term){
         searchTerm = term;
     }
     private void clearScreen()
     {
-        ingredientsToFind = new ArrayList<>();
-        ingredients = new ArrayList<>();
+        itemsToFind = new ArrayList<>();
+        items = new ArrayList<>();
         searchTerm = "";
     }
 
